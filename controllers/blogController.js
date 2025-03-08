@@ -137,3 +137,18 @@ export const getBlogById = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const getBlogByTitle = async (req, res) => {
+    try {
+        const { title } = req.params;
+        const blog = await BlogModel.getBlogByTitle(title);
+
+        if (!blog) {
+            return res.status(404).json({ message: 'Blog not found' });
+        }
+
+        res.json(blog);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

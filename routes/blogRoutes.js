@@ -5,6 +5,7 @@ import {
     deleteBlog,
     getAllBlogs,
     getBlogById,
+    getBlogByTitle
 } from '../controllers/blogController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 
@@ -15,5 +16,7 @@ router.put('/blogs/:id', authMiddleware, updateBlog);
 router.delete('/blogs/:id', authMiddleware, deleteBlog);
 router.get('/blogs', getAllBlogs);
 router.get('/blogs/:id', getBlogById);
+router.get('/blogs/:title', getBlogByTitle);
+
 
 export default router;

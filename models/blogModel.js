@@ -60,3 +60,20 @@ export const getBlogById = async (id) => {
     details: safeParseJSON(blog.details, ""),
   };
 };
+
+
+export const getBlogByTitle = async (title) => {
+  const decodedTitle = decodeURIComponent(title); // Decoding special characters
+  const [rows] = await pool.query("SELECT * FROM blogs WHERE title = ?", [decodedTitle]);
+
+  if (rows.length === 0) return null;
+
+  const blog = rows[0];
+
+  return {
+      ...blog,
+      images: safeParseJSON(blog.images, []),
+      details: safeParseJSON(blog.details, ""),
+  };
+};
+
