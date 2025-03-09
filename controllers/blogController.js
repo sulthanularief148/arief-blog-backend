@@ -1,6 +1,6 @@
 import * as BlogModel from '../models/blogModel.js';
 import pool from '../config/db.js';
-
+import slugify from 'slugify';
 // export const addBlog = async (req, res) => {
 //     // Check if req.body is an array (for bulk insert) or an object (single insert)
 //     const blogs = Array.isArray(req.body) ? req.body : [req.body]; // Normalize to array
@@ -42,26 +42,10 @@ import pool from '../config/db.js';
 // };
 
 
+
+
 export const addBlog = async (req, res) => {
     const blogs = Array.isArray(req.body) ? req.body : [req.body];
-
-    for (const blog of blogs) {
-        const { title, description, author, date, images, content } = blog;
-
-        if (!title || !description || !author || !date || !content) {
-            return res.status(400).json({ error: "All fields are required" });
-        }
-
-        // Ensure `content` is properly structured (e.g., JSON format)
-        // const formattedContent = typeof content === 'object'
-        //     ? JSON.stringify(content)
-        //     : content;
-        const formattedContent = JSON.stringify(content);
-
-        if (!formattedContent || formattedContent === 'null') {
-            return res.status(400).json({ error: "Content cannot be empty" });
-        }
-    }
 
     try {
         const insertResults = [];
@@ -69,29 +53,47 @@ export const addBlog = async (req, res) => {
         for (const blog of blogs) {
             const { title, description, author, date, images, content } = blog;
 
-            const formattedContent = typeof content === 'object'
-                ? JSON.stringify(content)
-                : content;
+            const slug = slugify(title, { lower: true, strict: true });
+            console.log("Generated Slug:", slug);
 
             const [result] = await pool.query(
-                "INSERT INTO blogs (title, description, author, date, images, content) VALUES (?, ?, ?, ?, ?, ?)",
-                [title, description, author, date, JSON.stringify(images), formattedContent]
+                "INSERT INTO blogs (title, slug, description, author, date, images, content) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                [title, slug, description, author, date, JSON.stringify(images), JSON.stringify(content)]
             );
 
             insertResults.push({
                 message: "Blog created successfully",
                 blogId: result.insertId,
+                slug
             });
         }
 
         res.status(201).json({
             message: "Blogs processed successfully",
-            results: insertResults,
+            results: insertResults
         });
     } catch (error) {
         console.error("Database error:", error);
         res.status(500).json({ error: error.message });
     }
+};
+
+
+export const getBlogBySlug = async (req, res) => {
+    const { slug } = req.params;
+    console.log(slug);
+
+    const [rows] = await pool.query(
+        "SELECT * FROM blogs WHERE slug = ?",
+        [slug]
+    );
+    console.log([rows], "Rows");
+
+    if (rows.length === 0) {
+        return res.status(404).json({ message: "Blog not found" });
+    }
+
+    res.json(rows[0]);
 };
 
 
@@ -119,7 +121,9 @@ export const deleteBlog = async (req, res) => {
 export const getAllBlogs = async (req, res) => {
     try {
         const blogs = await BlogModel.getAllBlogs();
-        res.json(blogs);
+        console.log(blogs, "blogs");
+
+        return res.json(blogs);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -141,9 +145,14 @@ export const getBlogById = async (req, res) => {
 export const getBlogByTitle = async (req, res) => {
     try {
         const { title } = req.params;
-        const blog = await BlogModel.getBlogByTitle(title);
+        console.log("Received Title (Encoded):", title);  // Debug
+        const decodedTitle = decodeURIComponent(title);
+        console.log("Decoded Title:", decodedTitle);      // Debug
+
+        const blog = await BlogModel.getBlogByTitle(decodedTitle);
 
         if (!blog) {
+            console.log("Blog Not Found for Title:", decodedTitle);  // Debug
             return res.status(404).json({ message: 'Blog not found' });
         }
 
@@ -152,3 +161,5 @@ export const getBlogByTitle = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
