@@ -54,8 +54,6 @@ export const addBlog = async (req, res) => {
             const { title, description, author, date, images, content } = blog;
 
             const slug = slugify(title, { lower: true, strict: true });
-            console.log("Generated Slug:", slug);
-
             const [result] = await pool.query(
                 "INSERT INTO blogs (title, slug, description, author, date, images, content) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 [title, slug, description, author, date, JSON.stringify(images), JSON.stringify(content)]
@@ -81,13 +79,10 @@ export const addBlog = async (req, res) => {
 
 export const getBlogBySlug = async (req, res) => {
     const { slug } = req.params;
-    console.log(slug);
-
     const [rows] = await pool.query(
         "SELECT * FROM blogs WHERE slug = ?",
         [slug]
     );
-    console.log([rows], "Rows");
 
     if (rows.length === 0) {
         return res.status(404).json({ message: "Blog not found" });
@@ -121,8 +116,6 @@ export const deleteBlog = async (req, res) => {
 export const getAllBlogs = async (req, res) => {
     try {
         const blogs = await BlogModel.getAllBlogs();
-        console.log(blogs, "blogs");
-
         return res.json(blogs);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -145,10 +138,7 @@ export const getBlogById = async (req, res) => {
 export const getBlogByTitle = async (req, res) => {
     try {
         const { title } = req.params;
-        console.log("Received Title (Encoded):", title);  // Debug
         const decodedTitle = decodeURIComponent(title);
-        console.log("Decoded Title:", decodedTitle);      // Debug
-
         const blog = await BlogModel.getBlogByTitle(decodedTitle);
 
         if (!blog) {
