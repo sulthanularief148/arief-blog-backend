@@ -110,50 +110,6 @@ export const getAllBlogs = async (req, res) => {
 };
 
 
-// export const getAllBlogs = async (req, res) => {
-//     const { category, page = 1, limit = 10 } = req.query;
-
-//     const offset = (page - 1) * limit; // Calculate starting point for pagination
-
-//     try {
-//         let query = "SELECT * FROM blogs";
-//         const queryParams = [];
-
-//         if (category) {
-//             query += " WHERE category = ?";
-//             queryParams.push(category);
-//         }
-
-//         query += " LIMIT ? OFFSET ?";
-//         queryParams.push(parseInt(limit), parseInt(offset));
-
-//         const [blogs] = await pool.query(query, queryParams);
-
-//         // Get total blog count for pagination control
-//         let countQuery = "SELECT COUNT(*) as total FROM blogs";
-//         if (category) {
-//             countQuery += " WHERE category = ?";
-//         }
-
-//         const [totalResult] = await pool.query(countQuery, category ? [category] : []);
-//         const totalBlogs = totalResult[0].total;
-//         const totalPages = Math.ceil(totalBlogs / limit);
-
-//         res.json({
-//             success: true,
-//             data: blogs.map(blog => ({
-//                 ...blog,
-//                 slug: blog.slug,
-//                 images: JSON.parse(blog.images)
-//             })),
-//             totalPages,
-//             currentPage: parseInt(page)
-//         });
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
-
 export const getBlogById = async (req, res) => {
     try {
         const { id } = req.params;
