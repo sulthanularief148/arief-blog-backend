@@ -6,14 +6,22 @@ import pool from './config/db.js'
 import blogRoutes from './routes/blogRoutes.js'
 import adminRoutes from "./routes/adminRoutes.js"
 import createTables from './config/initDB.js'
+import sitemapRoute from './routes/sitemap.js'
+import path from 'path'
+import { fileURLToPath } from 'url';
+import generateSitemap from './utils/generateSitemap.js'
 
 
 dotenv.config();
+// ESM workaround for __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express()
 app.use(express.json()); 
 app.use(cors())
 app.use(bodyParser.json())
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 createTables().then(() => {
@@ -22,11 +30,8 @@ createTables().then(() => {
     console.error("Database Initialization Failed ❌", err);
 });
 
-
-app.get("/", (req, res) => {
-    return res.json({ message: "Hello, World!" })
-})
-
+generateSitemap();
+app.use('/', sitemapRoute);
 app.use('/api', blogRoutes);
 app.use('/api/admin', adminRoutes);
 

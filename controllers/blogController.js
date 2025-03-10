@@ -1,47 +1,6 @@
 import * as BlogModel from '../models/blogModel.js';
 import pool from '../config/db.js';
 import slugify from 'slugify';
-// export const addBlog = async (req, res) => {
-//     // Check if req.body is an array (for bulk insert) or an object (single insert)
-//     const blogs = Array.isArray(req.body) ? req.body : [req.body]; // Normalize to array
-
-//     // Validation: Check all blogs have required fields
-//     for (const blog of blogs) {
-//         const { title, description, author, date, images, details } = blog;
-
-//         if (!title || !description || !author || !date || !details) {
-//             return res.status(400).json({ error: "All fields are required" });
-//         }
-//     }
-
-//     try {
-//         const insertResults = [];
-
-//         for (const blog of blogs) {
-//             const { title, description, author, date, images, details } = blog;
-
-//             const [result] = await pool.query(
-//                 "INSERT INTO blogs (title, description, author, date, images, details) VALUES (?, ?, ?, ?, ?, ?)",
-//                 [title, description, author, date, JSON.stringify(images), details]
-//             );
-
-//             insertResults.push({
-//                 message: "Blog created successfully",
-//                 blogId: result.insertId,
-//             });
-//         }
-
-//         res.status(201).json({
-//             message: "Blogs processed successfully",
-//             results: insertResults,
-//         });
-//     } catch (error) {
-//         console.error("Database error:", error);
-//         res.status(500).json({ error: error.message });
-//     }
-// };
-
-
 
 
 export const addBlog = async (req, res) => {
@@ -51,12 +10,12 @@ export const addBlog = async (req, res) => {
         const insertResults = [];
 
         for (const blog of blogs) {
-            const { title, description, author, date, images, content } = blog;
+            const { title, description, author, date, images, content, category } = blog;
 
             const slug = slugify(title, { lower: true, strict: true });
             const [result] = await pool.query(
-                "INSERT INTO blogs (title, slug, description, author, date, images, content) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                [title, slug, description, author, date, JSON.stringify(images), JSON.stringify(content)]
+                "INSERT INTO blogs (title, slug, description, author, date, images, content, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                [title, slug, description, author, date, JSON.stringify(images), JSON.stringify(content), category]
             );
 
             insertResults.push({
@@ -91,6 +50,19 @@ export const getBlogBySlug = async (req, res) => {
     res.json(rows[0]);
 };
 
+// export const getBlogBySlug = async (slug) => {
+//     const [rows] = await pool.query("SELECT * FROM blogs WHERE slug = ?", [slug]);
+
+//     if (rows.length === 0) return null;
+
+//     const blog = rows[0];
+//     return {
+//         ...blog,
+//         images: safeParseJSON(blog.images, []),
+//         details: safeParseJSON(blog.details, ""),
+//         category: blog.category  // Added category
+//     };
+// };
 
 export const updateBlog = async (req, res) => {
     try {
@@ -114,13 +86,73 @@ export const deleteBlog = async (req, res) => {
 };
 
 export const getAllBlogs = async (req, res) => {
+    const { category } = req.query;
+
     try {
-        const blogs = await BlogModel.getAllBlogs();
-        return res.json(blogs);
+        let query = "SELECT * FROM blogs";
+        const queryParams = [];
+
+        if (category) {
+            query += " WHERE category = ?";
+            queryParams.push(category);
+        }
+
+        const [blogs] = await pool.query(query, queryParams);
+
+        res.json(blogs.map(blog => ({
+            ...blog,
+            slug: blog.slug,
+            images: JSON.parse(blog.images)
+        })));
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+// export const getAllBlogs = async (req, res) => {
+//     const { category, page = 1, limit = 10 } = req.query;
+
+//     const offset = (page - 1) * limit; // Calculate starting point for pagination
+
+//     try {
+//         let query = "SELECT * FROM blogs";
+//         const queryParams = [];
+
+//         if (category) {
+//             query += " WHERE category = ?";
+//             queryParams.push(category);
+//         }
+
+//         query += " LIMIT ? OFFSET ?";
+//         queryParams.push(parseInt(limit), parseInt(offset));
+
+//         const [blogs] = await pool.query(query, queryParams);
+
+//         // Get total blog count for pagination control
+//         let countQuery = "SELECT COUNT(*) as total FROM blogs";
+//         if (category) {
+//             countQuery += " WHERE category = ?";
+//         }
+
+//         const [totalResult] = await pool.query(countQuery, category ? [category] : []);
+//         const totalBlogs = totalResult[0].total;
+//         const totalPages = Math.ceil(totalBlogs / limit);
+
+//         res.json({
+//             success: true,
+//             data: blogs.map(blog => ({
+//                 ...blog,
+//                 slug: blog.slug,
+//                 images: JSON.parse(blog.images)
+//             })),
+//             totalPages,
+//             currentPage: parseInt(page)
+//         });
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// };
 
 export const getBlogById = async (req, res) => {
     try {
