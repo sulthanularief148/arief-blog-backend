@@ -6,7 +6,7 @@ import pool from './config/db.js'
 import blogRoutes from './routes/blogRoutes.js'
 import adminRoutes from "./routes/adminRoutes.js"
 import createTables from './config/initDB.js'
-import sitemapRoute from './routes/sitemap.js'
+// import sitemapRoute from './routes/sitemap.js'
 import path from 'path'
 import { fileURLToPath } from 'url';
 import generateSitemap from './utils/generateSitemap.js'
@@ -32,10 +32,10 @@ createTables().then(() => {
 });
 
 generateSitemap();
-app.use('/test', (req, res) => {
+app.use('/', (req, res) => {
     return res.json("Hello world!")
 })
-app.use('/', sitemapRoute);
+// app.use('/', sitemapRoute);
 app.use('/api', blogRoutes);
 app.use('/api/admin', adminRoutes);
 app.use("/api/newsletter", newsletterRoutes);
