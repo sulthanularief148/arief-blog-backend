@@ -31,7 +31,7 @@ createTables().then(() => {
     console.error("Database Initialization Failed ❌", err);
 });
 
-generateSitemap();
+// generateSitemap();
 app.use('/', (req, res) => {
     return res.json("Hello world!")
 })
