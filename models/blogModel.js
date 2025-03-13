@@ -1,20 +1,20 @@
 import pool from "../config/db.js"
 // Add Blog (with multiple images handled as array)
 export const addBlog = async (blogData) => {
-  const { title, description, date, author, images, content } = blogData;
+  const { title, description, date, author, images, content, category } = blogData;
   const [result] = await pool.query(
-    'INSERT INTO blogs (title, description, date, author, images, content) VALUES (?, ?, ?, ?, ?, ?)',
-    [title, description, date, author, JSON.stringify(images), JSON.stringify(content)]
+    'INSERT INTO blogs (title, description, date, author, images, content, category) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [title, description, date, author, JSON.stringify(images), JSON.stringify(content), category]
   );
   return result.insertId;
 };
 
 // Update Blog
 export const updateBlog = async (id, blogData) => {
-  const { title, description, date, author, images, content } = blogData;
+  const { title, description, date, author, images, content, category } = blogData;
   await pool.query(
     'UPDATE blogs SET title=?, description=?, date=?, author=?, images=?, content=? WHERE id=?',
-    [title, description, date, author, JSON.stringify(images), JSON.stringify(content), id]
+    [title, description, date, author, JSON.stringify(images), JSON.stringify(content), category,  id]
   );
 };
 
