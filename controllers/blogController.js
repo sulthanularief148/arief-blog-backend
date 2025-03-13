@@ -1,28 +1,50 @@
 import * as BlogModel from '../models/blogModel.js';
-import pool from '../config/db.js';
-import slugify from 'slugify';
-
+import slugify from "slugify";
+import pool from "../config/db.js";
+import sendEmailNotification from '../utils/sendEmail.js';
 
 export const addBlog = async (req, res) => {
     const blogs = Array.isArray(req.body) ? req.body : [req.body];
 
     try {
         const insertResults = [];
+        let blogSlug = ""; // To store the latest blog slug for email
 
         for (const blog of blogs) {
             const { title, description, author, date, images, content, category } = blog;
 
+            // ✅ Generate slug
             const slug = slugify(title, { lower: true, strict: true });
+
+            // ✅ Insert blog into database
             const [result] = await pool.query(
                 "INSERT INTO blogs (title, slug, description, author, date, images, content, category) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 [title, slug, description, author, date, JSON.stringify(images), JSON.stringify(content), category]
             );
 
+            // ✅ Fetch the inserted blog slug from the database
+            const [blogData] = await pool.query(
+                "SELECT slug FROM blogs WHERE id = ?",
+                [result.insertId]
+            );
+
+            blogSlug = blogData[0]?.slug || slug; // Use DB slug or fallback to generated slug
+
             insertResults.push({
                 message: "Blog created successfully",
                 blogId: result.insertId,
-                slug
+                slug: blogSlug
             });
+        }
+
+        // ✅ Fetch all subscribers
+        const [subscribers] = await pool.query("SELECT email FROM subscribers");
+        const emails = subscribers.map(sub => sub.email);
+
+        console.log("📩 Sending email to subscribers:", emails);
+
+        if (emails.length > 0) {
+            await sendEmailNotification(emails, blogs[0].title, blogs[0].description, blogSlug, blogs[0]?.images);
         }
 
         res.status(201).json({
@@ -34,6 +56,8 @@ export const addBlog = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
 
 
 export const getBlogBySlug = async (req, res) => {

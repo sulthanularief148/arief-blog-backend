@@ -10,6 +10,7 @@ import sitemapRoute from './routes/sitemap.js'
 import path from 'path'
 import { fileURLToPath } from 'url';
 import generateSitemap from './utils/generateSitemap.js'
+import newsletterRoutes from "./routes/newsletterRoutes.js"; 
 
 
 dotenv.config();
@@ -34,6 +35,7 @@ generateSitemap();
 app.use('/', sitemapRoute);
 app.use('/api', blogRoutes);
 app.use('/api/admin', adminRoutes);
+app.use("/api/newsletter", newsletterRoutes);
 
 async function databaseConnection() {
     try {
