@@ -31,10 +31,10 @@ createTables().then(() => {
     console.error("Database Initialization Failed ❌", err);
 });
 
-// generateSitemap();
-app.use('/', (req, res) => {
-    return res.json("Hello world!")
-})
+//generateSitemap();
+// app.use('/', (req, res) => {
+//     return res.json("Hello world!")
+// })
 // app.use('/', sitemapRoute);
 app.use('/api', blogRoutes);
 app.use('/api/admin', adminRoutes);
