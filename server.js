@@ -11,6 +11,7 @@ import path from 'path'
 import { fileURLToPath } from 'url';
 import generateSitemap from './utils/generateSitemap.js'
 import newsletterRoutes from "./routes/newsletterRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 
 dotenv.config();
@@ -39,6 +40,7 @@ createTables().then(() => {
 app.use('/api', blogRoutes);
 app.use('/api/admin', adminRoutes);
 app.use("/api/newsletter", newsletterRoutes);
+app.use("/api/comments", commentRoutes);
 
 async function databaseConnection() {
     try {
