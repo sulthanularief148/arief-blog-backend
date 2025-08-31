@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "server": "node serve.js",
+    "server": "node server.js",
     "build": "echo 'No build step needed for a Node.js app'",
     "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"

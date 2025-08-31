@@ -7,6 +7,7 @@ import blogRoutes from './routes/blogRoutes.js'
 import adminRoutes from "./routes/adminRoutes.js"
 import createTables from './config/initDB.js'
 // import sitemapRoute from './routes/sitemap.js'
+import generateBlogSitemap from './utils/generateSitemap.js'
 import path from 'path'
 import { fileURLToPath } from 'url';
 import generateSitemap from './utils/generateSitemap.js'
@@ -32,16 +33,12 @@ createTables().then(() => {
     console.error("Database Initialization Failed ❌", err);
 });
 
-//generateSitemap();
-// app.use('/', (req, res) => {
-//     return res.json("Hello world!")
-// })
-// app.use('/', sitemapRoute);
+
 app.use('/api', blogRoutes);
 app.use('/api/admin', adminRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 app.use("/api/comments", commentRoutes);
-
+app.get("/sitemap-blog.xml", generateBlogSitemap);
 async function databaseConnection() {
     try {
         const connection = await pool.getConnection();
