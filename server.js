@@ -33,7 +33,10 @@ createTables().then(() => {
     console.error("Database Initialization Failed ❌", err);
 });
 
-
+app.get("/", (req, res) => {
+    res.json("Api working")
+    console.log("Successfullt deployed")
+})
 app.use('/api', blogRoutes);
 app.use('/api/admin', adminRoutes);
 app.use("/api/newsletter", newsletterRoutes);
