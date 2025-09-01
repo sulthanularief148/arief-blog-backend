@@ -6,11 +6,9 @@ import pool from './config/db.js'
 import blogRoutes from './routes/blogRoutes.js'
 import adminRoutes from "./routes/adminRoutes.js"
 import createTables from './config/initDB.js'
-// import sitemapRoute from './routes/sitemap.js'
 import generateBlogSitemap from './utils/generateSitemap.js'
 import path from 'path'
 import { fileURLToPath } from 'url';
-import generateSitemap from './utils/generateSitemap.js'
 import newsletterRoutes from "./routes/newsletterRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 
@@ -33,7 +31,7 @@ createTables().then(() => {
     console.error("Database Initialization Failed ❌", err);
 });
 
-app.get("/", (req, res) => {
+app.get("/test", (req, res) => {
     res.json("Api working")
     console.log("Successfullt deployed")
 })

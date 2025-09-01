@@ -2,7 +2,7 @@ import pool from "../config/db.js";
 
 export default async function generateBlogSitemap(req, res) {
   try {
-    const [blogs] = await pool.query("SELECT slug, updatedAt FROM blogs"); // adjust table/column names
+    const [blogs] = await pool.query("SELECT slug, updatedAt FROM blogs");
 
     const urls = blogs
       .map(
