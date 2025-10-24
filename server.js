@@ -11,6 +11,7 @@ import path from 'path'
 import { fileURLToPath } from 'url';
 import newsletterRoutes from "./routes/newsletterRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
+import askRoutes from "./routes/askRoutes.js";
 
 
 dotenv.config();
@@ -39,6 +40,7 @@ app.use('/api', blogRoutes);
 app.use('/api/admin', adminRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/ask", askRoutes);
 app.get("/sitemap-blog.xml", generateBlogSitemap);
 async function databaseConnection() {
     try {

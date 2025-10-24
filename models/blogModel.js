@@ -14,7 +14,7 @@ export const updateBlog = async (id, blogData) => {
   const { title, description, date, author, images, content, category } = blogData;
   await pool.query(
     'UPDATE blogs SET title=?, description=?, date=?, author=?, images=?, content=?, category=? WHERE id=?',
-    [title, description, date, author, JSON.stringify(images), JSON.stringify(content), category,  id]
+    [title, description, date, author, JSON.stringify(images), JSON.stringify(content), category, id]
   );
 };
 

@@ -18,7 +18,6 @@ router.post('/login', (req, res) => {
     return res.status(401).json({ success: false, message: 'Invalid credentials' });
 });
 
-// Optional - For portfolio, no need for admin signup if you only want one admin stored in env
-// If you want a dynamic admin system, you'd save admins to a database instead.
+
 
 export default router;

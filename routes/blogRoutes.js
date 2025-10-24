@@ -19,8 +19,8 @@ router.get('/blogs', getAllBlogs);
 router.get('/blogs/slug/:slug', getBlogBySlug);
 
 
-router.get('/blogs/:id', getBlogById);
-router.get('/blogs/:title', getBlogByTitle);
-// router.get('/blogs/:slug', getBlogBySlug);
+// router.get('/blogs/:id', getBlogById);
+// router.get('/blogs/:title', getBlogByTitle);
+router.get('/blogs/:slug', getBlogBySlug);
 
 export default router;

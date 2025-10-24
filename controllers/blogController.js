@@ -1,7 +1,7 @@
 import * as BlogModel from '../models/blogModel.js';
 import slugify from "slugify";
 import pool from "../config/db.js";
-import  { sendBlogNotification } from '../utils/sendEmail.js';
+import { sendBlogNotification } from '../utils/sendEmail.js';
 
 export const addBlog = async (req, res) => {
     const blogs = Array.isArray(req.body) ? req.body : [req.body];
