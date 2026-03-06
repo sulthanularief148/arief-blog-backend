@@ -23,7 +23,7 @@ const sendSubscriptionEmail = async (email) => {
                     Thank you for subscribing to our blog! You will now receive updates on our latest posts. 🎉
                 </p>
                 <div style="margin-top: 20px;">
-                    <a href="https://arief.info/blogs" target="_blank"
+                    <a href="https://arief.pro/blogs" target="_blank"
                         style="background-color: #007BFF; color: #ffffff; padding: 12px 20px; font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 5px; display: inline-block;">
                         📰 View Latest Blogs
                     </a>
@@ -31,7 +31,7 @@ const sendSubscriptionEmail = async (email) => {
                 <p style="font-size: 14px; color: #888; margin-top: 15px;">
                     You can unsubscribe anytime using the link below.
                 </p>
-                <a href="https://arief.info/unsubscribe" style="color: #FF3B30; font-size: 14px; text-decoration: none;">🔕 Unsubscribe</a>
+                <a href="https://arief.pro/unsubscribe" style="color: #FF3B30; font-size: 14px; text-decoration: none;">🔕 Unsubscribe</a>
             </div>
         `
     };
@@ -65,7 +65,7 @@ const sendBlogNotification = async (emails, title, description, slug, images) =>
                 </p>
     
                 <div style="text-align: center; margin-top: 20px;">
-                    <a href="https://arief.info/blogs/slug/${slug}" target="_blank"
+                    <a href="https://arief.pro/blogs/slug/${slug}" target="_blank"
                         style="background-color: #007BFF; color: #ffffff; padding: 12px 20px; font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 5px; display: inline-block;">
                         📖 Read Full Blog
                     </a>
@@ -78,7 +78,7 @@ const sendBlogNotification = async (emails, title, description, slug, images) =>
                 </p>
     
                 <div style="text-align: center; margin-top: 10px;">
-                    <a href="https://arief.info/unsubscribe" style="color: #FF3B30; font-size: 14px; text-decoration: none;">🔕 Unsubscribe</a>
+                    <a href="https://arief.pro/unsubscribe" style="color: #FF3B30; font-size: 14px; text-decoration: none;">🔕 Unsubscribe</a>
                 </div>
     
             </div>
@@ -104,7 +104,7 @@ const sendBlogNotification = async (emails, title, description, slug, images) =>
                         Keep up the great work, and continue sharing amazing content! 🚀
                     </p>
                     <div style="margin-top: 20px;">
-                        <a href="https://arief.info/blogs/slug/${slug}" target="_blank"
+                        <a href="https://arief.pro/blogs/slug/${slug}" target="_blank"
                             style="background-color: #28A745; color: #ffffff; padding: 12px 20px; font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 5px; display: inline-block;">
                             🎯 View Blog Post
                         </a>

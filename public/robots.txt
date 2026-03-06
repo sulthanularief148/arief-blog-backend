@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://arief.info/sitemap-blog.xml
+Sitemap: https://arief.pro/sitemap-blog.xml

@@ -52,7 +52,7 @@ function detectBlogCategory(fullText = "") {
 // Build user/system prompt for OpenAI
 function buildPrompts(blog, fullText, query, blogCategory) {
     const systemPrompt = `
-You are an expert assistant for the blog site "arief.info". 
+You are an expert assistant for the blog site "arief.pro". 
 - Answer politely and professionally in bullet points.
 - Keep answers concise (3-8 bullets) and include at the end one short "How I arrived" line (chain-of-thought summary).
 - Use ONLY the blog content provided as context when it is relevant.

@@ -8,7 +8,7 @@ export default async function generateBlogSitemap(req, res) {
       .map(
         (blog) => `
         <url>
-          <loc>https://arief.info/blogs/slug/${blog.slug}</loc>
+          <loc>https://arief.pro/blogs/slug/${blog.slug}</loc>
           <lastmod>${new Date(blog.updatedAt).toISOString()}</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.8</priority>
